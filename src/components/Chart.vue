@@ -17,6 +17,7 @@
             <v-row>
               <v-col cols="6" sm="3">
                 <v-combobox
+                  v-model="language"
                   clearable
                   outlined
                   persistent-hint
@@ -28,8 +29,11 @@
               </v-col>
               <v-col cols="6" sm="3">
                 <v-text-field
-                  v-model="title"
-                  :rules="rules"
+                  v-model="repoCount"
+                  :rules="[
+                    (v) => !isNaN(v) || 'It\'s not a Digit!',
+                    (v) => (v && v.length <= 2) || 'Too Many Digits!',
+                  ]"
                   outlined
                   counter="2"
                   hint="This field uses counter prop"
@@ -37,50 +41,48 @@
                 ></v-text-field>
               </v-col>
             </v-row>
+            <v-row v-for="(item, index) in apiData" :key="index">
+              <v-col>
+                <h3>Language: {{ item.language }}</h3>
+              </v-col>
+              <v-col>
+                <h5>Star Count: {{ item.stargazers_count }}</h5>
+              </v-col>
+            </v-row>
           </v-container>
         </v-form>
-        <v-row justify="center">
-          <a
-            v-for="(eco, i) in ecosystem"
-            :key="i"
-            :href="eco.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ eco.text }}
-          </a>
-        </v-row>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data: () => ({
+    apiData: null,
     name: "Chart",
     language: "Lang",
+    repoCount: 0,
+    obj: { type: "Fiat", model: "500", color: "white" },
   }),
   props: {
     msg: String,
+  },
+  created() {
+    this.getRepos();
+  },
+  methods: {
+    async getRepos() {
+      const api = await axios.get(
+        "https://api.github.com/search/repositories?q=language:javascript"
+      );
+      this.apiData = api.data.items;
+      console.log(this.apiData);
+    },
   },
 };
 </script>
 
 <!-- Add "scoped" to style this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
+<style scoped></style>
