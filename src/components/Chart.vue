@@ -11,46 +11,57 @@
         </p>
       </v-col>
       <v-col class="mb-5" cols="12">
-        <h2 class="headline font-weight-bold mb-3">The {{ language }} Repos</h2>
-        <v-form>
-          <v-container class="justify-center">
-            <v-row>
-              <v-col cols="6" sm="3">
-                <v-combobox
-                  v-model="language"
-                  clearable
-                  outlined
-                  persistent-hint
-                  small-chips
-                  solo
-                  label="Language"
-                  hint="Select The Repo Language"
-                ></v-combobox>
-              </v-col>
-              <v-col cols="6" sm="3">
-                <v-text-field
-                  v-model="repoCount"
-                  :rules="[
-                    (v) => !isNaN(v) || 'It\'s not a Digit!',
-                    (v) => (v && v.length <= 2) || 'Too Many Digits!',
-                  ]"
-                  outlined
-                  counter="2"
-                  hint="This field uses counter prop"
-                  label="Repo Count"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row v-for="(item, index) in apiData" :key="index">
-              <v-col>
-                <h3>Language: {{ item.language }}</h3>
-              </v-col>
-              <v-col>
-                <h5>Star Count: {{ item.stargazers_count }}</h5>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-form>
+        <v-card class="pa-5">
+          <h2 v-if="selectedLang" class="headline font-weight-bold mb-3">
+            Top {{ selectedLang }} Repos
+          </h2>
+          <h2 v-else class="headline font-weight-bold mb-3">
+            Please Select a Language
+          </h2>
+          <v-form ref="form">
+            <v-container class="justify-center">
+              <v-row>
+                <v-col cols="6" sm="3">
+                  <v-select
+                    :items="dropLang"
+                    v-model="selectedLang"
+                    @change="getRepos()"
+                    clearable
+                    outlined
+                    small-chips
+                    solo
+                    label="Language"
+                    hint="Select The Repo Language"
+                    :rules="[(v) => !!v || 'Please Select a Language']"
+                  ></v-select>
+                </v-col>
+                <v-col cols="6" sm="3">
+                  <v-text-field
+                    v-model="repoCount"
+                    @change="getRepos()"
+                    outlined
+                    counter="2"
+                    label="Repo Count"
+                    hint="This field uses counter prop"
+                    :rules="[
+                      (v) => !isNaN(v) || 'It\'s not a Digit!',
+                      (v) => (v && (v.length <= 2 && v.length > 0)) || 'Insert 1 or 2 Digits!',
+                      (v) => (v <= 20) || 'Can\'t display more than 20 Repos',
+                    ]"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row v-for="(item, index) in apiData" :key="index">
+                <v-col>
+                  <h3>Language: {{ item.language }}</h3>
+                </v-col>
+                <v-col>
+                  <h5>Star Count: {{ item.stargazers_count }}</h5>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-form>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -61,24 +72,27 @@ import axios from "axios";
 export default {
   data: () => ({
     apiData: null,
+    selectedLang: null,
+    repoCount: null,
     name: "Chart",
-    language: "Lang",
-    repoCount: 0,
-    obj: { type: "Fiat", model: "500", color: "white" },
+    repoLang: "Programing Language",
+    dropLang: ["Javascript", "Dart", "PHP", "python", "Java"],
   }),
   props: {
     msg: String,
   },
   created() {
-    this.getRepos();
   },
   methods: {
     async getRepos() {
-      const api = await axios.get(
-        "https://api.github.com/search/repositories?q=language:javascript"
-      );
-      this.apiData = api.data.items;
-      console.log(this.apiData);
+      this.$refs.form.validate()
+      if (this.selectedLang && this.repoCount && this.$refs.form.validate()) {
+        const api = await axios.get(
+          `https://api.github.com/search/repositories?q=language:${this.selectedLang}`
+        );
+        this.apiData = api.data.items.slice(0, this.repoCount);
+
+      }
     },
   },
 };
