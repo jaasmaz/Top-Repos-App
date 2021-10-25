@@ -2,7 +2,7 @@
   <v-container>
     <Form />
     <v-row>
-      <v-col class="Chart">
+      <v-col class="Chart" v-if="datacollection">
         <BarChart :chartData="datacollection" :options="options" />
       </v-col>
     </v-row>
