@@ -37,14 +37,17 @@ export default new Vuex.Store({
       context.commit("SET_LOADING_STATUS", "loading");
       axios
         .get(
-          `https://api.github.com/search/repositories?q=language:${this.state.formData.selectedLang}`
+          `https://api.github.com/search/repositories?q=language:${this.state.formData.selectedLang}`,
+          {
+            params: {
+              // Limit number of respons per request
+              per_page: this.state.formData.repoCount,
+            },
+          }
         )
         .then((response) => {
           context.commit("SET_LOADING_STATUS", "notLoading");
-          context.commit(
-            "SET_API_DATA",
-            response.data.items.slice(0, this.state.formData.repoCount)
-          );
+          context.commit("SET_API_DATA", response.data.items);
         });
     },
     setFormData(context, payload) {
