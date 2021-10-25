@@ -25,6 +25,7 @@ export default {
     starsCount: [100, 200, 550],
     repoName: null,
     repoColors: null,
+    // Options for Chart
     options: {
       scales: {
         yAxes: [
@@ -53,22 +54,24 @@ export default {
     },
   }),
   watch: {
-    // Call it when the State Change
+    // Draw Chart when the APIState Change
     "$store.getters.getApiData": function() {
       this.fillChart();
     },
   },
   computed: {
-    // Get the Api response from the store
+    // Get the new Api response from the store
     ...mapGetters({
       apiData: "getApiData",
     }),
   },
   methods: {
+    // show Chart
     fillChart() {
       this.repoName = this.apiData.map((el) => el.name);
       this.starsCount = this.apiData.map((el) => el.stargazers_count);
       this.repoColors = this.createColors(this.repoName.length);
+      // Build Data object to pass it to Chart component
       this.datacollection = {
         labels: this.repoName,
         datasets: [
@@ -80,14 +83,7 @@ export default {
         ],
       };
     },
-    randomColor(id) {
-      const r = () => Math.floor(256 * Math.random());
-
-      return (
-        this.colorCache[id] ||
-        (this.colorCache[id] = `rgb(${r()}, ${r()}, ${r()})`)
-      );
-    },
+    // Create Random Colors for each repo
     createColors(count) {
       let rgbColors = [];
       for (var i = 0; i < count; i++) {

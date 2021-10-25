@@ -68,7 +68,8 @@ export default {
   props: {},
   created() {},
   methods: {
-    // Update Form data State after input by user
+    // Update Form data State after input by user and
+    // send api request form Vuex with the provided params
     submitForm() {
       this.$refs.form.validate();
       if (
@@ -78,7 +79,6 @@ export default {
       ) {
         this.$store.dispatch("setFormData", this.formData);
         this.$store.dispatch("fetchApiData");
-        // this.$emit("submited", true);
       }
     },
   },

@@ -48,14 +48,10 @@ import { mapGetters } from "vuex";
 export default {
   data: () => ({}),
   computed: {
-    // Get the Api response from the store
+    // Get the Api response from the new store state
     ...mapGetters({
       apiData: "getApiData",
     }),
-  },
-  methods: {},
-  created() {
-    console.log(this.apiData);
   },
 };
 </script>
