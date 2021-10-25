@@ -11,7 +11,6 @@
         </p>
       </v-col>
     </v-row>
-    <Form />
     <Chart />
   </v-container>
 </template>
@@ -19,13 +18,12 @@
 <script>
 // @ is an alias to /src
 import Chart from "@/components/Chart.vue";
-import Form from "@/components/Form.vue";
+
 // import axios from "axios";
 
 export default {
   components: {
     Chart,
-    Form,
   },
   data: () => ({
     name: "Home",

@@ -1,29 +1,95 @@
 <template>
   <v-container>
-    <v-row v-for="(item, index) in apiData" :key="index">
-      <v-col>
-        <h3>Language: {{ item.language }}</h3>
-      </v-col>
-      <v-col>
-        <h5>Star Count: {{ item.stargazers_count }}</h5>
+    <Form />
+    <v-row>
+      <v-col class="Chart">
+        <BarChart :chartData="datacollection" :options="options" />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import BarChart from "./Chart.js";
+import Form from "./Form.vue";
+import { mapGetters } from "vuex";
+
 export default {
-  data: () => ({}),
-  computed: {
-    apiData() {
-      return this.$store.getters.getApiData;
+  components: {
+    BarChart,
+    Form,
+  },
+  data: () => ({
+    datacollection: null,
+    loaded: false,
+    starsCount: [100, 200, 550],
+    repoName: null,
+    repoColors: null,
+    options: {
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            },
+            gridLines: {
+              display: true,
+            },
+          },
+        ],
+        xAxes: [
+          {
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
+      },
+      legend: {
+        display: true,
+      },
+      responsive: true,
+      maintainAspectRatio: false,
+    },
+  }),
+  watch: {
+    // Call it when the State Change
+    "$store.getters.getApiData": function() {
+      this.fillChart();
     },
   },
-  props: {},
-  created() {},
-  methods: {},
+  computed: {
+    // Get the Api response from the store
+    ...mapGetters({
+      apiData: "getApiData",
+    }),
+  },
+  methods: {
+    fillChart() {
+      this.repoName = this.apiData.map((el) => el.name);
+      this.starsCount = this.apiData.map((el) => el.stargazers_count);
+      this.repoColors = this.createColors(this.repoName.length);
+      this.datacollection = {
+        labels: this.repoName,
+        datasets: [
+          {
+            label: "Total Stars",
+            backgroundColor: this.repoColors,
+            data: this.starsCount,
+          },
+        ],
+      };
+    },
+    createColors(count) {
+      let colorArry = [];
+      for (var i = 0; i < count; i++) {
+        let randomColor = Math.floor(
+          Math.random() * 16777215 * (i * 5)
+        ).toString(16);
+        colorArry.push("#" + randomColor);
+      }
+      return colorArry;
+    },
+  },
 };
 </script>
-
-<!-- Add "scoped" to style this component only -->
-<style scoped></style>

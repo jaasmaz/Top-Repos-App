@@ -1,59 +1,54 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col class="mb-5" cols="12">
-        <v-card class="pa-5">
-          <h2
-            v-if="formData.selectedLang"
-            class="headline font-weight-bold mb-3"
-          >
-            Top {{ formData.selectedLang }} Repos
-          </h2>
-          <h2 v-else class="headline font-weight-bold mb-3">
-            Please Select a Language
-          </h2>
-          <v-form ref="form">
-            <v-container class="justify-center">
-              <v-row>
-                <v-col cols="6" sm="3">
-                  <v-select
-                    :items="dropLang"
-                    v-model="formData.selectedLang"
-                    clearable
-                    outlined
-                    small-chips
-                    solo
-                    label="Language"
-                    hint="Select The Repo Language"
-                    :rules="[(v) => !!v || 'Please Select a Language']"
-                  ></v-select>
-                </v-col>
-                <v-col cols="6" sm="3">
-                  <v-text-field
-                    v-model="formData.repoCount"
-                    outlined
-                    counter="2"
-                    label="Repo Count"
-                    hint="This field uses counter prop"
-                    :rules="[
-                      (v) => !isNaN(v) || 'It\'s not a Digit!',
-                      (v) =>
-                        (v && v.length <= 2 && v.length > 0) ||
-                        'Insert 1 or 2 Digits!',
-                      (v) => v <= 20 || 'Can\'t display more than 20 Repos',
-                    ]"
-                  ></v-text-field>
-                </v-col>
-                <v-col>
-                  <v-btn class="primary pa-7" @click="submitForm">
-                    <v-icon>mdi-magnify</v-icon></v-btn
-                  >
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-form>
-        </v-card>
-      </v-col>
+    <v-row justify="center">
+      <v-card class="pa-5">
+        <h2 v-if="formData.selectedLang" class="headline font-weight-bold mb-3">
+          Top {{ formData.selectedLang }} Repos
+        </h2>
+        <h2 v-else class="headline font-weight-bold mb-3">
+          Please Select a Language
+        </h2>
+        <v-form ref="form">
+          <v-container class="justify-center">
+            <v-row>
+              <v-col md="4">
+                <v-select
+                  :items="dropLang"
+                  v-model="formData.selectedLang"
+                  clearable
+                  outlined
+                  small-chips
+                  solo
+                  label="Language"
+                  hint="Select The Repo Language"
+                  :rules="[(v) => !!v || 'Please Select a Language']"
+                ></v-select>
+              </v-col>
+              <v-col md="4">
+                <v-text-field
+                  v-model="formData.repoCount"
+                  outlined
+                  counter="2"
+                  label="Repo Count"
+                  hint="This field uses counter prop"
+                  :rules="[
+                    (v) => !isNaN(v) || 'It\'s not a Digit!',
+                    (v) =>
+                      (v && v.length <= 2 && v.length > 0) ||
+                      'Insert 1 or 2 Digits!',
+                    (v) => v <= 20 || 'Can\'t display more than 20 Repos',
+                  ]"
+                ></v-text-field>
+              </v-col>
+              <v-col>
+                <v-btn class="primary pa-7" @click="submitForm">
+                  <v-icon>mdi-magnify</v-icon></v-btn
+                >
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-form>
+      </v-card>
     </v-row>
   </v-container>
 </template>
@@ -81,9 +76,9 @@ export default {
       ) {
         this.$store.dispatch("setFormData", this.formData);
         this.$store.dispatch("fetchApiData");
+        // this.$emit("submited", true);
       }
     },
-    sendApiReq() {},
   },
 };
 </script>
