@@ -19,8 +19,6 @@
 // @ is an alias to /src
 import Chart from "@/components/Chart.vue";
 
-// import axios from "axios";
-
 export default {
   components: {
     Chart,

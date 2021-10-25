@@ -7,12 +7,12 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn class="ma-2" to="/">
+      <v-btn class="ma-2 amber darken-3 black--white" to="/">
         <span>Home</span>
         <v-icon>mdi-home</v-icon>
       </v-btn>
-      <v-btn to="/about" class="ma-2">
-        <span>About</span>
+      <v-btn to="/details" class="ma-2 amber darken-2 black--white">
+        <span>More Details</span>
         <v-icon>mdi-file-multiple</v-icon>
       </v-btn>
     </v-app-bar>
