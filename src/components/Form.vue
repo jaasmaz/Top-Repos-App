@@ -30,13 +30,15 @@
                   outlined
                   counter="2"
                   label="Repo Count"
-                  hint="This field uses counter prop"
+                  hint="Amount of Repos to disply"
                   :rules="[
                     (v) => !isNaN(v) || 'It\'s not a Digit!',
                     (v) =>
                       (v && v.length <= 2 && v.length > 0) ||
                       'Insert 1 or 2 Digits!',
-                    (v) => v <= 20 || 'Can\'t display more than 20 Repos',
+                    (v) =>
+                      (v <= 20 && v > 0) ||
+                      'Can\'t display more than 20 Repos or less than 1',
                   ]"
                 ></v-text-field>
               </v-col>
