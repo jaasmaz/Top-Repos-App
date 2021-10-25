@@ -80,15 +80,24 @@ export default {
         ],
       };
     },
+    randomColor(id) {
+      const r = () => Math.floor(256 * Math.random());
+
+      return (
+        this.colorCache[id] ||
+        (this.colorCache[id] = `rgb(${r()}, ${r()}, ${r()})`)
+      );
+    },
     createColors(count) {
-      let colorArry = [];
+      let rgbColors = [];
       for (var i = 0; i < count; i++) {
-        let randomColor = Math.floor(
-          Math.random() * 16777215 * (i * 5)
-        ).toString(16);
-        colorArry.push("#" + randomColor);
+        var rgb = [];
+        for (var j = 0; j < 3; j++) {
+          rgb.push(Math.floor(Math.random() * 255));
+        }
+        rgbColors.push("rgb(" + rgb.join(",") + ")");
       }
-      return colorArry;
+      return rgbColors;
     },
   },
 };
