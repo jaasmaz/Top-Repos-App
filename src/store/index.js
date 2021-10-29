@@ -8,7 +8,9 @@ export default new Vuex.Store({
   state: {
     loadingStatus: "notLoading",
     apiData: null,
+    formCleared: null,
     formData: {
+      cleared: null,
       selectedLang: null,
       repoCount: null,
     },
@@ -53,6 +55,10 @@ export default new Vuex.Store({
     setFormData(context, payload) {
       context.commit("SET_LOADING_STATUS", "loading");
       context.commit("SET_FORM_DATA", payload);
+      // If form is cleared set API Data to null
+      if (payload.cleared) {
+        context.commit("SET_API_DATA", null);
+      }
       context.commit("SET_LOADING_STATUS", "notLoading");
     },
   },

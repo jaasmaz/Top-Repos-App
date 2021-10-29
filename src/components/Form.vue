@@ -47,6 +47,11 @@
                   <v-icon>mdi-magnify</v-icon></v-btn
                 >
               </v-col>
+              <v-col>
+                <v-btn class="error pa-7" @click="clearForm">
+                  <v-icon>mdi-close</v-icon></v-btn
+                >
+              </v-col>
             </v-row>
           </v-container>
         </v-form>
@@ -58,11 +63,12 @@
 <script>
 export default {
   data: () => ({
+    name: "Form",
     formData: {
+      cleared: null,
       selectedLang: null,
       repoCount: null,
     },
-    name: "Form",
     dropLang: ["Javascript", "Dart", "PHP", "python", "Java"],
   }),
   props: {},
@@ -80,6 +86,10 @@ export default {
         this.$store.dispatch("setFormData", this.formData);
         this.$store.dispatch("fetchApiData");
       }
+    },
+    clearForm() {
+      this.formData.cleared = true;
+      this.$store.dispatch("setFormData", this.formData);
     },
   },
 };

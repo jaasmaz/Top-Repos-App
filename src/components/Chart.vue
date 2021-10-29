@@ -22,7 +22,7 @@ export default {
   data: () => ({
     datacollection: null,
     loaded: false,
-    starsCount: [100, 200, 550],
+    starsCount: null,
     repoName: null,
     repoColors: null,
     // Options for Chart
@@ -68,20 +68,25 @@ export default {
   methods: {
     // show Chart
     fillChart() {
-      this.repoName = this.apiData.map((el) => el.name);
-      this.starsCount = this.apiData.map((el) => el.stargazers_count);
-      this.repoColors = this.createColors(this.repoName.length);
-      // Build Data object to pass it to Chart component
-      this.datacollection = {
-        labels: this.repoName,
-        datasets: [
-          {
-            label: "Total Stars",
-            backgroundColor: this.repoColors,
-            data: this.starsCount,
-          },
-        ],
-      };
+      // if apiData is null then reset chart
+      if (!this.apiData) {
+        this.datacollection = null;
+      } else {
+        this.repoName = this.apiData.map((el) => el.name);
+        this.starsCount = this.apiData.map((el) => el.stargazers_count);
+        this.repoColors = this.createColors(this.repoName.length);
+        // Build Data object to pass it to Chart component
+        this.datacollection = {
+          labels: this.repoName,
+          datasets: [
+            {
+              label: "Total Stars",
+              backgroundColor: this.repoColors,
+              data: this.starsCount,
+            },
+          ],
+        };
+      }
     },
     // Create Random Colors for each repo
     createColors(count) {
